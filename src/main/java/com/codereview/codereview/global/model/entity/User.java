@@ -1,16 +1,19 @@
-package com.codereview.codereview.global.model;
+package com.codereview.codereview.global.model.entity;
 
 import com.codereview.codereview.global.model.type.Rank;
 import com.codereview.codereview.global.model.type.TimeStampEntity;
 import jakarta.persistence.*;
+import lombok.AllArgsConstructor;
 import lombok.Builder;
 import lombok.NoArgsConstructor;
+import lombok.RequiredArgsConstructor;
 
 import java.util.List;
 
 @Entity
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
 public class User extends TimeStampEntity {
 
     @Id
