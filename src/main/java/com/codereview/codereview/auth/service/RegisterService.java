@@ -8,12 +8,14 @@ import com.codereview.codereview.global.error.exception.RegisterExceptionImpl;
 import com.codereview.codereview.global.model.entity.Skill;
 import com.codereview.codereview.global.model.entity.User;
 import com.codereview.codereview.global.model.type.Rank;
+import com.codereview.codereview.global.repository.SkillRepository;
 import com.codereview.codereview.global.repository.UserRepository;
 import com.codereview.codereview.global.util.EmailUtil;
 import com.codereview.codereview.global.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -27,7 +29,9 @@ public class RegisterService {
     private final EmailUtil emailUtil;
     private final RedisUtil redisUtil;
     private final UserRepository userRepository;
+    private final SkillRepository skillRepository;
 
+    @Transactional
     public ResponseEntity register(RegisterRequest req) {
 
         String successKey = getSuccessKey(req.email());
@@ -35,13 +39,15 @@ public class RegisterService {
         if (!req.successKey().equals(successKey)) {
             throw new RegisterExceptionImpl(RegisterErrorType.REGISTER_ERROR);
         }
+        redisUtil.setString(req.email(), "", 1, TimeUnit.MICROSECONDS);
+
 
         userRepository.save(User.builder()
-                        .email(req.email())
-                        .userPw(req.password())
-                        .rank(Rank.Orion)
-                        .skills(getSkills(req.skill()))
-                        .nickname(req.nickname())
+                .email(req.email())
+                .userPw(req.password())
+                .rank(Rank.Orion)
+                .skills(validationSkill(req.skill()))
+                .nickname(req.nickname())
                 .build());
 
         return ResponseEntity.ok().build();
@@ -52,7 +58,7 @@ public class RegisterService {
         String randomSuccessKey = emailUtil.randomSuccess();
 
         emailUtil.send_email(req.email(), randomSuccessKey);
-        redisUtil.setString(req.email(), randomSuccessKey, 30, TimeUnit.MINUTES);
+        redisUtil.setString(req.email(), randomSuccessKey, 5, TimeUnit.MINUTES);
 
         return ResponseEntity.ok().build();
     }
@@ -64,8 +70,6 @@ public class RegisterService {
         if (!req.successKey().equals(successKey)) {
             throw new RegisterExceptionImpl(RegisterErrorType.EMAIL_CHECK_ERROR);
         }
-
-        redisUtil.setString(req.email(), "", 1 , TimeUnit.MICROSECONDS);
 
         return ResponseEntity.ok().build();
     }
@@ -80,8 +84,16 @@ public class RegisterService {
         return successKey;
     }
 
-    private List<Skill> getSkills(String skill){
-        List<Skill> skills = new ArrayList<>();
+    @Transactional(readOnly = true)
+    private List<String> validationSkill(List<String> skills) {
+
+        for (String skill : skills) {
+            skillRepository.findBySkill(skill).orElseThrow(() -> {
+                System.out.println("여기서 로그");
+                throw new RegisterExceptionImpl(RegisterErrorType.REGISTER_ERROR);
+            });
+        }
+
         return skills;
     }
 

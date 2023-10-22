@@ -4,8 +4,6 @@ import com.codereview.codereview.auth.model.request.EmailCheckRequest;
 import com.codereview.codereview.auth.model.request.EmailSendRequest;
 import com.codereview.codereview.auth.model.request.RegisterRequest;
 import com.codereview.codereview.auth.service.RegisterService;
-import com.codereview.codereview.global.error.errortype.RegisterErrorType;
-import com.codereview.codereview.global.error.exception.RegisterExceptionImpl;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.PostMapping;
@@ -16,7 +14,7 @@ import org.springframework.web.bind.annotation.RestController;
 @RestController
 @RequiredArgsConstructor
 @RequestMapping("/api/register")
-public class RegisterContoller {
+public class RegisterController {
 
     private final RegisterService registerService;
 

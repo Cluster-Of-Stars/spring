@@ -9,7 +9,7 @@ public record RegisterRequest(
         String email,
         String password,
         String nickname,
-        String skill,
+        List<String> skill,
         String successKey
 ) {
 }

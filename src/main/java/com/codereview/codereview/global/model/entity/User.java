@@ -24,9 +24,6 @@ public class User extends TimeStampEntity {
     private String nickname;
 
     @Column(length = 20, unique = true, nullable = false)
-    private String userId;
-
-    @Column(length = 20, unique = true, nullable = false)
     private String userPw;
 
     @Column(length = 100, unique = true, nullable = false)
@@ -35,7 +32,7 @@ public class User extends TimeStampEntity {
     @Enumerated
     private Rank rank;
 
-    @OneToMany(cascade = CascadeType.ALL)
-    private List<Skill> skills;
+    @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
+    private List<String> skills;
 
 }
