@@ -1,12 +1,13 @@
-package com.codereview.codereview.global.model;
+package com.codereview.codereview.global.model.entity;
 
 import jakarta.persistence.*;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 @Entity
 @Builder
 @NoArgsConstructor
+@AllArgsConstructor
+@Getter
 public class Skill {
 
     @Id
