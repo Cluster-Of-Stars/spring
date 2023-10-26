@@ -14,6 +14,7 @@ import com.codereview.codereview.global.util.EmailUtil;
 import com.codereview.codereview.global.util.RedisUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -30,6 +31,7 @@ public class RegisterService {
     private final RedisUtil redisUtil;
     private final UserRepository userRepository;
     private final SkillRepository skillRepository;
+    private final PasswordEncoder passwordEncoder;
 
     @Transactional
     public ResponseEntity register(RegisterRequest req) {
@@ -44,7 +46,7 @@ public class RegisterService {
 
         userRepository.save(User.builder()
                 .email(req.email())
-                .userPw(req.password())
+                .userPw(passwordEncoder.encode(req.password()))
                 .rank(Rank.Orion)
                 .skills(validationSkill(req.skill()))
                 .nickname(req.nickname())
