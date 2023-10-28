@@ -9,7 +9,6 @@ import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
-import org.springframework.security.config.annotation.method.configuration.EnableGlobalMethodSecurity;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
@@ -57,9 +56,7 @@ public class WebSecurityConfig {
         return source;
     }
 
-    @Bean
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
-        http.cors(cors -> corsConfigurationSource());
         http.csrf((csrf) -> csrf.disable());
         http.sessionManagement((sessionManagement) ->
                 sessionManagement.sessionCreationPolicy(SessionCreationPolicy.STATELESS)
@@ -68,7 +65,8 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers(
                                 "/api/register/**",
-                                "/api/skill"
+                                "/api/skill",
+                                "/api/register/**"
                         ).permitAll()
                         .anyRequest().authenticated()
         );
