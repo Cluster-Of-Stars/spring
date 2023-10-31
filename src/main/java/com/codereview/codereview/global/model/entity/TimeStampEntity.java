@@ -1,4 +1,4 @@
-package com.codereview.codereview.global.model.type;
+package com.codereview.codereview.global.model.entity;
 
 import jakarta.persistence.Entity;
 import jakarta.persistence.EntityListeners;

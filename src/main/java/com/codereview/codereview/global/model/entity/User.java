@@ -1,18 +1,16 @@
 package com.codereview.codereview.global.model.entity;
 
 import com.codereview.codereview.global.model.type.Rank;
-import com.codereview.codereview.global.model.type.TimeStampEntity;
 import jakarta.persistence.*;
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.NoArgsConstructor;
-import lombok.RequiredArgsConstructor;
+import lombok.*;
 
 import java.util.List;
 
 @Entity
 @Builder
 @NoArgsConstructor
+@Getter
+@ToString
 @AllArgsConstructor
 public class User extends TimeStampEntity {
 
@@ -23,7 +21,7 @@ public class User extends TimeStampEntity {
     @Column(length = 20, unique = true, nullable = false)
     private String nickname;
 
-    @Column(length = 20, unique = true, nullable = false)
+    @Column( unique = true, nullable = false)
     private String userPw;
 
     @Column(length = 100, unique = true, nullable = false)
