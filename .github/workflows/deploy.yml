@@ -1,4 +1,4 @@
-name: Spring-Boot-twitter-clone-Amazon EC2
+name: Spring-Boot-codereview-Amazon EC2
 
 on:
   push:
