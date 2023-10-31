@@ -3,7 +3,7 @@ name: Spring-Boot-twitter-clone-Amazon EC2
 on:
   push:
     branches:
-      - master
+      - main
 env:
   AWS_REGION: ap-northeast-2
   S3_BUCKET_NAME: code-review-s3
