@@ -1,7 +1,6 @@
 package com.codereview.codereview.global.model.entity;
 
 import com.codereview.codereview.global.model.type.Rank;
-import com.codereview.codereview.global.model.type.TimeStampEntity;
 import jakarta.persistence.*;
 import lombok.*;
 
