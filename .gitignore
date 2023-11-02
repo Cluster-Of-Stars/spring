@@ -179,4 +179,5 @@ gradle-app.setting
 *.hprof
 
 src/main/resources/*.yaml
+src/main/resources/*.pem
 # End of https://www.toptal.com/developers/gitignore/api/windows,database,intellij+all,java
