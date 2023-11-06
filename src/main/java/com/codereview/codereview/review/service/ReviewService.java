@@ -20,8 +20,6 @@ public class ReviewService {
 
     public ResponseEntity createCodeReview(ReviewCreateRequest request, User user) {
 
-
-
         return ResponseEntity.ok().build();
     }
 

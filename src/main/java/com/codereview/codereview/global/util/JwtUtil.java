@@ -49,7 +49,6 @@ public class JwtUtil {
     // 토큰 생성
     public String createToken(String username, Rank rank) {
         Date date = new Date();
-
         return BEARER_PREFIX +
                 Jwts.builder()
                         .setSubject(username) // 사용자 식별자값(ID)
@@ -67,6 +66,9 @@ public class JwtUtil {
 
             Cookie cookie = new Cookie(AUTHORIZATION_HEADER, token); // Name-Value
             cookie.setPath("/");
+            cookie.setHttpOnly(true);
+            cookie.setSecure(true); // SameSite=None 설정을 사용하려면 Secure도 true로 설정해야함.
+            cookie.setAttribute("SameSite", "None");
 
             // Response 객체에 Cookie 추가
             res.addCookie(cookie);
