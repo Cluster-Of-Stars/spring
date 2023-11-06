@@ -58,4 +58,4 @@ jobs:
           host: ${{ secrets.HOST }}
           key: ${{ secrets.PASSWORD }}
           script_stop: true
-          script: chmod +x /home/ubuntu/scripts/gh_deploy.sh && sh /home/ubuntu/scripts/gh_deploy.sh
+          script: chmod +x /home/ubuntu/deploy/scripts/gh_deploy.sh && sh /home/ubuntu/deploy/scripts/gh_deploy.sh
