@@ -18,7 +18,6 @@ public class LoginService implements UserDetailsService {
 
     @Override
     public UserDetails loadUserByUsername(String username) throws UsernameNotFoundException {
-        System.out.println(username);
         User user = repository.findByEmail(username)
                 .orElseThrow(() -> {
                     throw new UsernameNotFoundException("유저를 찾을수 없음");
