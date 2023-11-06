@@ -48,7 +48,7 @@ jobs:
           username: ubuntu
           host: ${{ secrets.HOST }}
           key: ${{ secrets.PASSWORD }}
-          source: "deploy.sh"
+          source: "./scripts/gh_deploy.sh"
           target: "/home/ubuntu/deploy"
 
       - name: Execute Server Init Script
