@@ -1,6 +1,6 @@
 #!/bin/bash
 PROJECT_NAME="deploy"
-JAR_PATH="/home/ubuntu/deploy/*.jar"
+JAR_PATH="/home/ubuntu/deploy/codereview.jar"
 DEPLOY_PATH=/home/ubuntu/$PROJECT_NAME/
 DEPLOY_LOG_PATH="/home/ubuntu/$PROJECT_NAME/deploy.log"
 DEPLOY_ERR_LOG_PATH="/home/ubuntu/$PROJECT_NAME/deploy_err.log"
