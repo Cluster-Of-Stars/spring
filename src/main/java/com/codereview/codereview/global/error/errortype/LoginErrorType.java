@@ -1,14 +1,15 @@
 package com.codereview.codereview.global.error.errortype;
 
-import com.codereview.codereview.global.model.error.ErrorResponse;
 import lombok.Getter;
 import lombok.RequiredArgsConstructor;
+import org.springframework.http.HttpStatusCode;
 
 @RequiredArgsConstructor
 @Getter
 public enum LoginErrorType {
 
-    LOGIN_ERROR(new ErrorResponse(401,"A005"))
+    LOGIN_ERROR(HttpStatusCode.valueOf(401),"A005")
     ;
-    private final ErrorResponse errorCode;
+    private final HttpStatusCode statusCode;
+    private final String errorCode;
 }
