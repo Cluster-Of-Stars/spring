@@ -21,7 +21,7 @@ public class User extends TimeStampEntity {
     @Column(length = 20, unique = true, nullable = false)
     private String nickname;
 
-    @Column( unique = true, nullable = false)
+    @Column(unique = true, nullable = false)
     private String userPw;
 
     @Column(length = 100, unique = true, nullable = false)
@@ -32,5 +32,8 @@ public class User extends TimeStampEntity {
 
     @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
     private List<String> skills;
+
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    private List<Board> boards;
 
 }
