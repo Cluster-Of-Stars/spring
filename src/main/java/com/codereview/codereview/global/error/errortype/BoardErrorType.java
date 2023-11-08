@@ -6,10 +6,11 @@ import org.springframework.http.HttpStatusCode;
 
 @RequiredArgsConstructor
 @Getter
-public enum LoginErrorType {
+public enum BoardErrorType {
 
-    LOGIN_ERROR(HttpStatusCode.valueOf(401),"A005")
-    ;
+    BOARD_NOT_FOUND(HttpStatusCode.valueOf(401),"A007")
+
+;
     private final HttpStatusCode statusCode;
     private final String errorCode;
 }

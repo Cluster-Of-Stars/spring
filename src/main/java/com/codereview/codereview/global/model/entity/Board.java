@@ -39,5 +39,19 @@ public class Board extends TimeStampEntity {
     @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
     private List<String> category;
 
+    @ManyToOne( cascade = CascadeType.ALL)
+    private User user;
+
+    public void updateCodeReview(
+            String title,
+            String code,
+            String question,
+            String problem
+    ){
+        this.title = title;
+        this.code = code;
+        this.problem = problem;
+        this.question = question;
+    }
 
 }
