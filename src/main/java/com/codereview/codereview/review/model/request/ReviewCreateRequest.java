@@ -23,7 +23,7 @@ public record ReviewCreateRequest(
                 .question(question)
                 .code(code)
                 .views(0)
-                .category(Arrays.stream(category.split(",")).toList())
+                .category(Arrays.asList(category.split(",")))
                 .status(CodeReviewStatus.CODE_WAITING)
                 .build();
     }
