@@ -9,10 +9,7 @@ import org.springframework.web.client.HttpStatusCodeException;
 @Getter
 public class LoginExceptionImpl extends HttpStatusCodeException {
 
-    private final LoginErrorType errorType;
-
     public LoginExceptionImpl(LoginErrorType errorType) {
         super(errorType.getStatusCode(), errorType.getErrorCode());
-        this.errorType = errorType;
     }
 }
