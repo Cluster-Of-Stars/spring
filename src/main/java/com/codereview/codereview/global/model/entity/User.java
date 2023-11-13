@@ -33,7 +33,7 @@ public class User extends TimeStampEntity {
     @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
     private List<String> skills;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL)
+    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Board> boards;
 
 }

@@ -1,10 +1,9 @@
-package com.codereview.codereview.global.model.entity;
+package com.codereview.codereview.global.model.security;
 
+import com.codereview.codereview.global.model.entity.User;
 import org.springframework.security.core.GrantedAuthority;
-import org.springframework.security.core.authority.SimpleGrantedAuthority;
 import org.springframework.security.core.userdetails.UserDetails;
 
-import java.util.ArrayList;
 import java.util.Collection;
 
 public class UserDetailsImpl implements UserDetails {
@@ -29,14 +28,11 @@ public class UserDetailsImpl implements UserDetails {
         return user.getEmail();
     }
 
+
     @Override
     public Collection<? extends GrantedAuthority> getAuthorities() {
-        String authority = "user";
-        SimpleGrantedAuthority simpleGrantedAuthority = new SimpleGrantedAuthority(authority);
-        Collection<GrantedAuthority> authorities = new ArrayList<>();
-        authorities.add(simpleGrantedAuthority);
 
-        return authorities;
+        return null;
     }
 
     @Override
