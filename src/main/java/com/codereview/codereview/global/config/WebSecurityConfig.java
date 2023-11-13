@@ -1,8 +1,8 @@
 package com.codereview.codereview.global.config;
 
-import com.codereview.codereview.auth.service.LoginService;
 import com.codereview.codereview.global.config.filter.JwtAuthenticationFilter;
 import com.codereview.codereview.global.config.filter.JwtAuthorizationFilter;
+import com.codereview.codereview.global.config.service.LoginService;
 import com.codereview.codereview.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
@@ -37,14 +37,14 @@ public class WebSecurityConfig {
 
     @Bean
     public JwtAuthenticationFilter jwtAuthenticationFilter() throws Exception {
-        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil);
+        JwtAuthenticationFilter filter = new JwtAuthenticationFilter(jwtUtil, loginService);
         filter.setAuthenticationManager(authenticationManager(authenticationConfiguration));
         return filter;
     }
 
     @Bean
     public JwtAuthorizationFilter jwtAuthorizationFilter() {
-        return new JwtAuthorizationFilter(jwtUtil, loginService);
+        return new JwtAuthorizationFilter(jwtUtil);
     }
 
     @Bean

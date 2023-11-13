@@ -1,8 +1,8 @@
 package com.codereview.codereview.global.config.filter;
 
 import com.codereview.codereview.auth.model.request.LoginRequest;
-import com.codereview.codereview.global.model.entity.UserDetailsImpl;
-import com.codereview.codereview.global.model.type.Rank;
+import com.codereview.codereview.global.config.service.LoginService;
+import com.codereview.codereview.global.model.security.UserDetailsImpl;
 import com.codereview.codereview.global.util.JwtUtil;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.servlet.FilterChain;
@@ -16,15 +16,16 @@ import org.springframework.security.core.AuthenticationException;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
 
 import java.io.IOException;
-import java.util.stream.Collectors;
 
 @Slf4j(topic = "로그인 및 JWT 생성")
 public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilter {
 
     private final JwtUtil jwtUtil;
+    private final LoginService loginService;
 
-    public JwtAuthenticationFilter(JwtUtil jwtUtil) {
+    public JwtAuthenticationFilter(JwtUtil jwtUtil, LoginService loginService) {
         this.jwtUtil = jwtUtil;
+        this.loginService = loginService;
         setFilterProcessesUrl("/api/login");
     }
 
@@ -39,7 +40,7 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
                             requestDto.email(),
                             requestDto.password(),
                             null
-                    ) // manager에 토큰 전해주는 로직
+                    )
             );
         } catch (IOException e) {
             log.error(e.getMessage());
@@ -50,10 +51,9 @@ public class JwtAuthenticationFilter extends UsernamePasswordAuthenticationFilte
     @Override
     protected void successfulAuthentication(HttpServletRequest request, HttpServletResponse response, FilterChain chain, Authentication authResult) throws IOException, ServletException {
         log.info("로그인 성공 및 JWT 생성");
-        String username = ((UserDetailsImpl) authResult.getPrincipal()).getUsername();
-        Rank role = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getRank();
+        Long userId = ((UserDetailsImpl) authResult.getPrincipal()).getUser().getId();
 
-        String token = jwtUtil.createToken(username, role);
+        String token = jwtUtil.createToken(userId);
         jwtUtil.addJwtToCookie(token, response);
         log.info("토큰 값 생성"+token);
 

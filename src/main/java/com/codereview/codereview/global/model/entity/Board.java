@@ -1,6 +1,7 @@
 package com.codereview.codereview.global.model.entity;
 
 import com.codereview.codereview.global.model.type.CodeReviewStatus;
+import com.codereview.codereview.review.model.request.ReviewCreateRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -39,7 +40,7 @@ public class Board extends TimeStampEntity {
     @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
     private List<String> category;
 
-    @ManyToOne( cascade = CascadeType.ALL)
+    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private User user;
 
     public void updateCodeReview(
@@ -47,11 +48,12 @@ public class Board extends TimeStampEntity {
             String code,
             String question,
             String problem
-    ){
+    ) {
         this.title = title;
         this.code = code;
         this.problem = problem;
         this.question = question;
     }
+
 
 }
