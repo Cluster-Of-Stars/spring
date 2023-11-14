@@ -56,6 +56,7 @@ public class ReviewService {
         return ResponseEntity.ok().build();
     }
 
+    @Transactional
     private Board getBoard(Long id) {
         return boardRepository.findById(id)
                 .orElseThrow(() -> {
@@ -63,6 +64,7 @@ public class ReviewService {
                 });
     }
 
+    @Transactional
     private User getUser(Long id) {
         //TODO: 예외처리 해야함.
         return userRepository.findById(id)
@@ -77,6 +79,7 @@ public class ReviewService {
         }
     }
 
+    @Transactional(readOnly = true)
     public ResponseEntity selectCodeReview() {
 
         List<ReviewResponse> reviewResponses = boardRepository.findAll().stream()
@@ -98,6 +101,7 @@ public class ReviewService {
                 .body(reviewResponses);
     }
 
+    @Transactional(readOnly = true)
     public ResponseEntity selectOneCodeReview(Long id) {
         ReviewResponse reviewResponse = boardRepository.findById(id).stream()
                 .map(board -> {
