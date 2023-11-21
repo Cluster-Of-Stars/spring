@@ -19,8 +19,11 @@ public class ReviewController {
     private final ReviewService reviewServicer;
 
     @GetMapping
-    public ResponseEntity selectCodeReview() {
-        return reviewServicer.selectCodeReview();
+    public ResponseEntity selectCodeReview(
+            @RequestParam Integer size,
+            @RequestParam Integer page
+    ) {
+        return reviewServicer.selectCodeReview(size, page - 1);
     }
 
     @GetMapping("/{id}")
