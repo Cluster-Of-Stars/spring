@@ -23,7 +23,7 @@ public record ReviewCreateRequest(
                 .problem(req.problem())
                 .question(req.question())
                 .code(req.code())
-                .views(0)
+                .views(0L)
                 .category(req.category())
                 .status(CodeReviewStatus.CODE_WAITING)
                 .build();

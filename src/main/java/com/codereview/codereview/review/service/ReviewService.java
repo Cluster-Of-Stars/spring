@@ -8,8 +8,13 @@ import com.codereview.codereview.global.repository.BoardRepository;
 import com.codereview.codereview.global.repository.UserRepository;
 import com.codereview.codereview.review.model.request.ReviewCreateRequest;
 import com.codereview.codereview.review.model.request.ReviewUpdateRequest;
+import com.codereview.codereview.review.model.response.ReviewOneResponse;
 import com.codereview.codereview.review.model.response.ReviewResponse;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.PageRequest;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.domain.Sort;
 import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
@@ -80,22 +85,10 @@ public class ReviewService {
     }
 
     @Transactional(readOnly = true)
-    public ResponseEntity selectCodeReview() {
+    public ResponseEntity selectCodeReview(Integer size, Integer page) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdAt"));
 
-        List<ReviewResponse> reviewResponses = boardRepository.findAll().stream()
-                .map(board -> {
-                    return new ReviewResponse(
-                            board.getId(),
-                            board.getTitle(),
-                            board.getProblem(),
-                            board.getQuestion(),
-                            board.getCategory(),
-                            board.getStatus(),
-                            0, //TODO: 처리해야함.
-                            board.getCreatedAt()
-                    );
-                })
-                .toList();
+        Page<ReviewResponse> reviewResponses = boardRepository.findAllBoardPage(pageable, boardRepository.count());
 
         return ResponseEntity.ok()
                 .body(reviewResponses);
@@ -103,22 +96,10 @@ public class ReviewService {
 
     @Transactional(readOnly = true)
     public ResponseEntity selectOneCodeReview(Long id) {
-        ReviewResponse reviewResponse = boardRepository.findById(id).stream()
-                .map(board -> {
-                    return new ReviewResponse(
-                            board.getId(),
-                            board.getTitle(),
-                            board.getProblem(),
-                            board.getQuestion(),
-                            board.getCategory(),
-                            board.getStatus(),
-                            0, //TODO: 처리해야함.
-                            board.getCreatedAt()
-                    );
-                })
-                .findAny().orElseThrow(
-                        //TODO:예외처리
-                );
+        ReviewOneResponse reviewResponse = boardRepository.findOneBoard(id)
+                .orElseThrow(() -> {
+                    throw new IllegalArgumentException();
+                }); //TODO: 예외처리
 
         return ResponseEntity.ok()
                 .body(reviewResponse);

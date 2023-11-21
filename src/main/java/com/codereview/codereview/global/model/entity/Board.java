@@ -32,12 +32,12 @@ public class Board extends TimeStampEntity {
     private String code;
 
     @Column
-    private long views;
+    private Long views;
 
     @Enumerated
     private CodeReviewStatus status;
 
-    @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
+    @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     private List<String> category;
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -54,6 +54,5 @@ public class Board extends TimeStampEntity {
         this.problem = problem;
         this.question = question;
     }
-
 
 }
