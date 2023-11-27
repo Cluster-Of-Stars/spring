@@ -33,7 +33,13 @@ public class User extends TimeStampEntity {
     @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
     private List<String> skills;
 
-    @OneToMany(mappedBy = "user",cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-    private List<Board> boards;
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Review> reviews;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ReviewHeart> reviewHearts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ReviewView> reviewViews;
 
 }
