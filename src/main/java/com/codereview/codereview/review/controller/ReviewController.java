@@ -28,9 +28,10 @@ public class ReviewController {
 
     @GetMapping("/{id}")
     public ResponseEntity selectOneCodeReview(
-            @PathVariable Long id
+            @PathVariable Long id,
+            @AuthenticationPrincipal AuthPayload userDetails
     ) {
-        return reviewServicer.selectOneCodeReview(id);
+        return reviewServicer.selectOneCodeReview(id, userDetails.userId());
     }
 
     @PostMapping

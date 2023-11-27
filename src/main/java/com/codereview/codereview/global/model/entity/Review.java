@@ -1,7 +1,6 @@
 package com.codereview.codereview.global.model.entity;
 
 import com.codereview.codereview.global.model.type.CodeReviewStatus;
-import com.codereview.codereview.review.model.request.ReviewCreateRequest;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -13,7 +12,7 @@ import java.util.List;
 @Getter
 @ToString
 @AllArgsConstructor
-public class Board extends TimeStampEntity {
+public class Review extends TimeStampEntity {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -42,6 +41,12 @@ public class Board extends TimeStampEntity {
 
     @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private User user;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ReviewHeart> reviewHearts;
+
+    @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ReviewView> reviewViews;
 
     public void updateCodeReview(
             String title,

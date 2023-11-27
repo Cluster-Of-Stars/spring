@@ -1,7 +1,7 @@
-package com.codereview.codereview.global.repository.board.querydsl;
+package com.codereview.codereview.global.repository.review.querydsl;
 
-import com.codereview.codereview.global.model.entity.Board;
-import com.codereview.codereview.global.model.entity.QBoard;
+import com.codereview.codereview.global.model.entity.QReview;
+import com.codereview.codereview.global.model.entity.Review;
 import com.codereview.codereview.global.model.entity.QUser;
 import com.codereview.codereview.review.model.response.ReviewOneResponse;
 import com.codereview.codereview.review.model.response.ReviewResponse;
@@ -18,15 +18,15 @@ import java.util.Optional;
 
 import static org.springframework.util.StringUtils.isEmpty;
 
-public class BoardRepositoryCustomImpl extends QuerydslRepositorySupport implements BoardRepositoryCustom {
+public class ReviewRepositoryCustomImpl extends QuerydslRepositorySupport implements ReviewRepositoryCustom {
 
-    private QBoard qBoard = QBoard.board;
+    private QReview qReview = QReview.review;
     private QUser qUser = QUser.user;
     private final EntityManager em;
     private final JPAQueryFactory queryFactory;
 
-    public BoardRepositoryCustomImpl(EntityManager em) {
-        super(Board.class);
+    public ReviewRepositoryCustomImpl(EntityManager em) {
+        super(Review.class);
         this.em = em;
         this.queryFactory = new JPAQueryFactory(em);
     }
@@ -34,14 +34,14 @@ public class BoardRepositoryCustomImpl extends QuerydslRepositorySupport impleme
     @Override
     public Page<ReviewResponse> findAllBoardPage(Pageable pageable, long count) {
 
-        List<Board> boards = queryFactory
-                .selectFrom(qBoard)
-                .orderBy(qBoard.createdAt.desc())
+        List<Review> reviews = queryFactory
+                .selectFrom(qReview)
+                .orderBy(qReview.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
-        List<ReviewResponse> reviewResponses = boards.stream()
+        List<ReviewResponse> reviewResponses = reviews.stream()
                 .map(board -> new ReviewResponse(
                         board.getId(),
                         board.getTitle(),
@@ -60,31 +60,31 @@ public class BoardRepositoryCustomImpl extends QuerydslRepositorySupport impleme
     @Override
     public Optional<ReviewOneResponse> findOneBoard(Long id) {
 
-        Board board = queryFactory
-                .selectFrom(qBoard)
-                .leftJoin(qUser).on(qBoard.user.id.eq(qUser.id))
-                .orderBy(qBoard.createdAt.desc())
-                .where(boardIdEq(id))
+        Review review = queryFactory
+                .selectFrom(qReview)
+                .leftJoin(qUser).on(qReview.user.id.eq(qUser.id))
+                .orderBy(qReview.createdAt.desc())
+                .where(reviewIdEq(id))
                 .fetchOne();
 
         ReviewOneResponse response = new ReviewOneResponse(
-                board.getId(),
-                board.getTitle(),
-                board.getProblem(),
-                board.getQuestion(),
-                board.getUser().getNickname(),
-                board.getCategory(),
-                board.getStatus(),
-                board.getViews(), //TODO: 수정 요망
-                board.getCode(),
-                board.getCreatedAt()
+                review.getId(),
+                review.getTitle(),
+                review.getProblem(),
+                review.getQuestion(),
+                review.getUser().getNickname(),
+                review.getCategory(),
+                review.getStatus(),
+                review.getViews(), //TODO: 수정 요망
+                review.getCode(),
+                review.getCreatedAt()
         );
 
         return Optional.of(response);
     }
 
-    private BooleanExpression boardIdEq(Long id) {
-        return isEmpty(id) ? null : qBoard.id.eq(id);
+    private BooleanExpression reviewIdEq(Long id) {
+        return isEmpty(id) ? null : qReview.id.eq(id);
     }
 
 }

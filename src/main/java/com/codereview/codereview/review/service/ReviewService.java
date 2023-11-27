@@ -2,9 +2,12 @@ package com.codereview.codereview.review.service;
 
 import com.codereview.codereview.global.error.errortype.BoardErrorType;
 import com.codereview.codereview.global.error.exception.BoardExceptionImpl;
-import com.codereview.codereview.global.model.entity.Board;
+import com.codereview.codereview.global.model.entity.Review;
+import com.codereview.codereview.global.model.entity.ReviewHeart;
+import com.codereview.codereview.global.model.entity.ReviewView;
 import com.codereview.codereview.global.model.entity.User;
-import com.codereview.codereview.global.repository.BoardRepository;
+import com.codereview.codereview.global.repository.ReviewRepository;
+import com.codereview.codereview.global.repository.ReviewViewRepository;
 import com.codereview.codereview.global.repository.UserRepository;
 import com.codereview.codereview.review.model.request.ReviewCreateRequest;
 import com.codereview.codereview.review.model.request.ReviewUpdateRequest;
@@ -19,14 +22,15 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 
-import java.util.List;
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
 public class ReviewService {
 
-    private final BoardRepository boardRepository;
+    private final ReviewRepository boardRepository;
     private final UserRepository userRepository;
+    private final ReviewViewRepository reviewViewRepository;
 
     @Transactional
     public ResponseEntity createCodeReview(ReviewCreateRequest request, Long userId) {
@@ -37,11 +41,11 @@ public class ReviewService {
 
     @Transactional
     public ResponseEntity updateCodeReview(Long boardId, ReviewUpdateRequest request, Long userId) {
-        Board board = getBoard(boardId);
+        Review review = getReview(boardId);
 
-        checkUser(board.getUser(), getUser(userId));
+        checkUser(review.getUser(), getUser(userId));
 
-        board.updateCodeReview(
+        review.updateCodeReview(
                 request.title(),
                 request.code(),
                 request.question(),
@@ -53,16 +57,16 @@ public class ReviewService {
 
     @Transactional
     public ResponseEntity deleteCodeReview(Long boardId, Long userId) {
-        Board board = getBoard(boardId);
+        Review review = getReview(boardId);
 
-        checkUser(board.getUser(), getUser(userId));
+        checkUser(review.getUser(), getUser(userId));
 
-        boardRepository.delete(board);
+        boardRepository.delete(review);
         return ResponseEntity.ok().build();
     }
 
     @Transactional
-    private Board getBoard(Long id) {
+    private Review getReview(Long id) {
         return boardRepository.findById(id)
                 .orElseThrow(() -> {
                     throw new BoardExceptionImpl(BoardErrorType.BOARD_NOT_FOUND);
@@ -94,15 +98,33 @@ public class ReviewService {
                 .body(reviewResponses);
     }
 
-    @Transactional(readOnly = true)
-    public ResponseEntity selectOneCodeReview(Long id) {
-        ReviewOneResponse reviewResponse = boardRepository.findOneBoard(id)
+    @Transactional
+    public ResponseEntity selectOneCodeReview(Long reviewId, Long userId) {
+        ReviewOneResponse reviewResponse = boardRepository.findOneBoard(reviewId)
                 .orElseThrow(() -> {
                     throw new IllegalArgumentException();
                 }); //TODO: 예외처리
 
+        validationView(reviewId, userId);
+
         return ResponseEntity.ok()
                 .body(reviewResponse);
+    }
+
+    @Transactional
+    private void validationView(Long reviewId, Long userId) {
+        Review review = getReview(reviewId);
+        User user = getUser(userId);
+
+        Optional<ReviewView> reviewView = reviewViewRepository.findReviewView(reviewId, userId);
+
+        if (reviewView.isEmpty()) {
+            reviewViewRepository.save(ReviewView.builder()
+                    .review(review)
+                    .user(user)
+                    .build()
+            );
+        }
     }
 
 }

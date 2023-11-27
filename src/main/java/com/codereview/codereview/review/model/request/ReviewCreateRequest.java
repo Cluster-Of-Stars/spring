@@ -1,12 +1,9 @@
 package com.codereview.codereview.review.model.request;
 
-import com.codereview.codereview.global.model.entity.Board;
-import com.codereview.codereview.global.model.entity.Skill;
+import com.codereview.codereview.global.model.entity.Review;
 import com.codereview.codereview.global.model.entity.User;
 import com.codereview.codereview.global.model.type.CodeReviewStatus;
-import org.springframework.transaction.annotation.Transactional;
 
-import java.util.Arrays;
 import java.util.List;
 
 public record ReviewCreateRequest(
@@ -16,8 +13,8 @@ public record ReviewCreateRequest(
         List<String> category,
         String code
 ) {
-    public Board toBoard(ReviewCreateRequest req, User user) {
-        return Board.builder()
+    public Review toBoard(ReviewCreateRequest req, User user) {
+        return Review.builder()
                 .user(user)
                 .title(req.title())
                 .problem(req.problem())
