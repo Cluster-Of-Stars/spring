@@ -36,22 +36,24 @@ public class ReviewRepositoryCustomImpl extends QuerydslRepositorySupport implem
 
         List<Review> reviews = queryFactory
                 .selectFrom(qReview)
+                .leftJoin(qUser).on(qReview.user.id.eq(qUser.id))
                 .orderBy(qReview.createdAt.desc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
                 .fetch();
 
         List<ReviewResponse> reviewResponses = reviews.stream()
-                .map(board -> new ReviewResponse(
-                        board.getId(),
-                        board.getTitle(),
-                        board.getProblem(),
-                        board.getQuestion(),
-                        board.getCategory(),
-                        board.getStatus(),
-                        (long) board.getReviewHearts().size(), //TODO: 수정 요망
-                        board.getViews(),
-                        board.getCreatedAt()
+                .map(review -> new ReviewResponse(
+                        review.getId(),
+                        review.getUser().getNickname(),
+                        review.getTitle(),
+                        review.getProblem(),
+                        review.getQuestion(),
+                        review.getCategory(),
+                        review.getStatus(),
+                        (long) review.getReviewViews().size(), //TODO: 수정 요망
+                        (long) review.getReviewViews().size(),
+                        review.getCreatedAt()
                 ))
                 .toList();
 
@@ -63,7 +65,6 @@ public class ReviewRepositoryCustomImpl extends QuerydslRepositorySupport implem
 
         Review review = queryFactory
                 .selectFrom(qReview)
-                .leftJoin(qUser).on(qReview.user.id.eq(qUser.id))
                 .orderBy(qReview.createdAt.desc())
                 .where(reviewIdEq(id))
                 .fetchOne();
@@ -73,7 +74,6 @@ public class ReviewRepositoryCustomImpl extends QuerydslRepositorySupport implem
                 review.getTitle(),
                 review.getProblem(),
                 review.getQuestion(),
-                review.getUser().getNickname(),
                 review.getCategory(),
                 review.getStatus(),
                 (long) review.getReviewHearts().size(),

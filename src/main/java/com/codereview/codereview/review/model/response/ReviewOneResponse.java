@@ -10,7 +10,6 @@ public record ReviewOneResponse(
         String title,
         String problem,
         String question,
-        String nickname,
         List<String> category,
         CodeReviewStatus action,
         Long heartCount,

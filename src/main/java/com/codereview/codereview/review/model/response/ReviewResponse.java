@@ -8,6 +8,7 @@ import java.util.List;
 
 public record ReviewResponse(
         Long id,
+        String nickname,
         String title,
         String problem,
         String question,
