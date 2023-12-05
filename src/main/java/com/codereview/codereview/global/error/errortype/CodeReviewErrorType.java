@@ -6,7 +6,7 @@ import org.springframework.http.HttpStatusCode;
 
 @RequiredArgsConstructor
 @Getter
-public enum BoardErrorType {
+public enum CodeReviewErrorType {
 
     BOARD_NOT_FOUND(HttpStatusCode.valueOf(401),"지정된 게시글을 찾을수 없습니다.")
 

@@ -1,6 +1,5 @@
 package com.codereview.codereview.global.error.exception;
 
-import com.codereview.codereview.global.error.errortype.BoardErrorType;
 import com.codereview.codereview.global.error.errortype.UserErrorType;
 import org.springframework.web.client.HttpStatusCodeException;
 

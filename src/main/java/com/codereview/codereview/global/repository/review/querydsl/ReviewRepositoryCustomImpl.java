@@ -61,6 +61,36 @@ public class ReviewRepositoryCustomImpl extends QuerydslRepositorySupport implem
     }
 
     @Override
+    public Page<ReviewResponse> findAllCateogryReviewPage(Pageable pageable, long count, String category) {
+
+        List<Review> reviews = queryFactory
+                .selectFrom(qReview)
+                .where(reviewCategoryEq(category))
+                .leftJoin(qUser).on(qReview.user.id.eq(qUser.id))
+                .orderBy(qReview.createdAt.desc())
+                .offset(pageable.getOffset())
+                .limit(pageable.getPageSize())
+                .fetch();
+
+        List<ReviewResponse> reviewResponses = reviews.stream()
+                .map(review -> new ReviewResponse(
+                        review.getId(),
+                        review.getUser().getNickname(),
+                        review.getTitle(),
+                        review.getProblem(),
+                        review.getQuestion(),
+                        review.getCategory(),
+                        review.getStatus(),
+                        (long) review.getReviewHearts().size(), //TODO: 수정 요망
+                        (long) review.getReviewViews().size(),
+                        review.getCreatedAt()
+                ))
+                .toList();
+
+        return new PageImpl<>(reviewResponses, pageable, 0);
+    }
+
+    @Override
     public Optional<ReviewOneResponse> findOneBoard(Long id) {
 
         Review review = queryFactory
@@ -87,6 +117,10 @@ public class ReviewRepositoryCustomImpl extends QuerydslRepositorySupport implem
 
     private BooleanExpression reviewIdEq(Long id) {
         return isEmpty(id) ? null : qReview.id.eq(id);
+    }
+
+    private BooleanExpression reviewCategoryEq(String category) {
+        return isEmpty(category) ? null : qReview.category.any().in(category);
     }
 
 }
