@@ -13,7 +13,8 @@ public record ReviewOneResponse(
         String nickname,
         List<String> category,
         CodeReviewStatus action,
-        long heartCount,
+        Long heartCount,
+        Long views,
         String code,
         LocalDateTime createdAt
 ) {

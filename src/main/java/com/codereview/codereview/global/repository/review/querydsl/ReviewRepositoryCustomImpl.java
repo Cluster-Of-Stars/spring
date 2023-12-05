@@ -49,7 +49,8 @@ public class ReviewRepositoryCustomImpl extends QuerydslRepositorySupport implem
                         board.getQuestion(),
                         board.getCategory(),
                         board.getStatus(),
-                        0L, //TODO: 수정 요망
+                        (long) board.getReviewHearts().size(), //TODO: 수정 요망
+                        board.getViews(),
                         board.getCreatedAt()
                 ))
                 .toList();
@@ -75,7 +76,8 @@ public class ReviewRepositoryCustomImpl extends QuerydslRepositorySupport implem
                 review.getUser().getNickname(),
                 review.getCategory(),
                 review.getStatus(),
-                review.getViews(), //TODO: 수정 요망
+                (long) review.getReviewHearts().size(),
+                (long) review.getReviewViews().size(),
                 review.getCode(),
                 review.getCreatedAt()
         );
