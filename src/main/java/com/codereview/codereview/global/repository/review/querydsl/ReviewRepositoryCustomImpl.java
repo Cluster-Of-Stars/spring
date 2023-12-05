@@ -51,7 +51,7 @@ public class ReviewRepositoryCustomImpl extends QuerydslRepositorySupport implem
                         review.getQuestion(),
                         review.getCategory(),
                         review.getStatus(),
-                        (long) review.getReviewViews().size(), //TODO: 수정 요망
+                        (long) review.getReviewHearts().size(), //TODO: 수정 요망
                         (long) review.getReviewViews().size(),
                         review.getCreatedAt()
                 ))
