@@ -30,9 +30,6 @@ public class Review extends TimeStampEntity {
     @Column
     private String code;
 
-    @Column
-    private Long views;
-
     @Enumerated
     private CodeReviewStatus status;
 
