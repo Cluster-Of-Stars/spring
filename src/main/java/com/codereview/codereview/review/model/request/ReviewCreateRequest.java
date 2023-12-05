@@ -4,6 +4,7 @@ import com.codereview.codereview.global.model.entity.Review;
 import com.codereview.codereview.global.model.entity.User;
 import com.codereview.codereview.global.model.type.CodeReviewStatus;
 
+import java.util.ArrayList;
 import java.util.List;
 
 public record ReviewCreateRequest(
@@ -20,7 +21,7 @@ public record ReviewCreateRequest(
                 .problem(req.problem())
                 .question(req.question())
                 .code(req.code())
-                .views(0L)
+                .reviewViews(new ArrayList<>())
                 .category(req.category())
                 .status(CodeReviewStatus.CODE_WAITING)
                 .build();
