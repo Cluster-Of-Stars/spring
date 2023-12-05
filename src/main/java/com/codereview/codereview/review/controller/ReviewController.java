@@ -16,14 +16,23 @@ import org.springframework.web.bind.annotation.*;
 @RequestMapping("/api/codeReview")
 public class ReviewController {
 
-    private final ReviewService reviewServicer;
+    private final ReviewService reviewService;
+
+    @GetMapping("/category")
+    public ResponseEntity selectCategoryCodeReview(
+            @RequestParam Integer size,
+            @RequestParam Integer page,
+            @RequestParam String category
+    ) {
+        return reviewService.selectCategoryCodeReview(size, page - 1, category);
+    }
 
     @GetMapping
     public ResponseEntity selectCodeReview(
             @RequestParam Integer size,
             @RequestParam Integer page
     ) {
-        return reviewServicer.selectCodeReview(size, page - 1);
+        return reviewService.selectCodeReview(size, page - 1);
     }
 
     @GetMapping("/{id}")
@@ -31,7 +40,7 @@ public class ReviewController {
             @PathVariable Long id,
             @AuthenticationPrincipal AuthPayload userDetails
     ) {
-        return reviewServicer.selectOneCodeReview(id, userDetails.userId());
+        return reviewService.selectOneCodeReview(id, userDetails.userId());
     }
 
     @PostMapping
@@ -39,7 +48,7 @@ public class ReviewController {
             @RequestBody ReviewCreateRequest request,
             @AuthenticationPrincipal AuthPayload userDetails
     ) {
-        return reviewServicer.createCodeReview(request, userDetails.userId());
+        return reviewService.createCodeReview(request, userDetails.userId());
     }
 
     @PutMapping("/{id}")
@@ -48,7 +57,7 @@ public class ReviewController {
             @RequestBody ReviewUpdateRequest request,
             @AuthenticationPrincipal AuthPayload userDetails
     ) {
-        return reviewServicer.updateCodeReview(id, request, userDetails.userId());
+        return reviewService.updateCodeReview(id, request, userDetails.userId());
     }
 
     @DeleteMapping("/{id}")
@@ -56,15 +65,15 @@ public class ReviewController {
             @PathVariable Long id,
             @AuthenticationPrincipal AuthPayload userDetails
     ) {
-        return reviewServicer.deleteCodeReview(id, userDetails.userId());
+        return reviewService.deleteCodeReview(id, userDetails.userId());
     }
 
     @PostMapping("/success/{id}")
     public ResponseEntity successCodeReview(
             @PathVariable Long id,
             @AuthenticationPrincipal AuthPayload userDetails
-    ){
-        return reviewServicer.successCodeReview(id, userDetails.userId());
+    ) {
+        return reviewService.successCodeReview(id, userDetails.userId());
     }
 
 }

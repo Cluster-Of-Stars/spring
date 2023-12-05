@@ -11,6 +11,8 @@ public interface ReviewRepositoryCustom {
 
     Page<ReviewResponse> findAllBoardPage(Pageable pageable, long count);
 
+    Page<ReviewResponse> findAllCateogryReviewPage(Pageable pageable, long count, String category);
+
     Optional<ReviewOneResponse> findOneBoard(Long id);
 
 }

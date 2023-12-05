@@ -1,8 +1,8 @@
 package com.codereview.codereview.review.service;
 
-import com.codereview.codereview.global.error.errortype.BoardErrorType;
+import com.codereview.codereview.global.error.errortype.CodeReviewErrorType;
 import com.codereview.codereview.global.error.errortype.UserErrorType;
-import com.codereview.codereview.global.error.exception.BoardExceptionImpl;
+import com.codereview.codereview.global.error.exception.CodeReviewExceptionImpl;
 import com.codereview.codereview.global.error.exception.UserExceptionImpl;
 import com.codereview.codereview.global.model.entity.Review;
 import com.codereview.codereview.global.model.entity.ReviewView;
@@ -70,7 +70,7 @@ public class ReviewService {
     private Review getReview(Long id) {
         return boardRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new BoardExceptionImpl(BoardErrorType.BOARD_NOT_FOUND);
+                    throw new CodeReviewExceptionImpl(CodeReviewErrorType.BOARD_NOT_FOUND);
                 });
     }
 
@@ -102,7 +102,7 @@ public class ReviewService {
     public ResponseEntity selectOneCodeReview(Long reviewId, Long userId) {
         ReviewOneResponse reviewResponse = boardRepository.findOneBoard(reviewId)
                 .orElseThrow(() -> {
-                    throw new BoardExceptionImpl(BoardErrorType.BOARD_NOT_FOUND);
+                    throw new CodeReviewExceptionImpl(CodeReviewErrorType.BOARD_NOT_FOUND);
                 });
 
         validationView(reviewId, userId);
@@ -136,6 +136,17 @@ public class ReviewService {
         review.updateCodeReview(CodeReviewStatus.CODE_CLEAR);
 
         return ResponseEntity.ok().build();
+    }
+
+    @Transactional
+    public ResponseEntity selectCategoryCodeReview(Integer size, int page, String category) {
+        Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdAt"));
+
+        Page<ReviewResponse> reviewResponses = boardRepository.findAllCateogryReviewPage(pageable,
+                boardRepository.count(), category);
+
+        return ResponseEntity.ok()
+                .body(reviewResponses);
     }
 
 }

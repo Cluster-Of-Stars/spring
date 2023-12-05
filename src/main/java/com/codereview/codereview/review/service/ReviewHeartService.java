@@ -1,16 +1,14 @@
 package com.codereview.codereview.review.service;
 
-import com.codereview.codereview.global.error.errortype.BoardErrorType;
+import com.codereview.codereview.global.error.errortype.CodeReviewErrorType;
 import com.codereview.codereview.global.error.errortype.UserErrorType;
-import com.codereview.codereview.global.error.exception.BoardExceptionImpl;
+import com.codereview.codereview.global.error.exception.CodeReviewExceptionImpl;
 import com.codereview.codereview.global.error.exception.UserExceptionImpl;
 import com.codereview.codereview.global.model.entity.Review;
 import com.codereview.codereview.global.model.entity.ReviewHeart;
-import com.codereview.codereview.global.model.entity.ReviewView;
 import com.codereview.codereview.global.model.entity.User;
 import com.codereview.codereview.global.repository.ReviewHeartRepository;
 import com.codereview.codereview.global.repository.ReviewRepository;
-import com.codereview.codereview.global.repository.ReviewViewRepository;
 import com.codereview.codereview.global.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.ResponseEntity;
@@ -51,7 +49,7 @@ public class ReviewHeartService {
     private Review getReview(Long id) {
         return boardRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new BoardExceptionImpl(BoardErrorType.BOARD_NOT_FOUND);
+                    throw new CodeReviewExceptionImpl(CodeReviewErrorType.BOARD_NOT_FOUND);
                 });
     }
 
