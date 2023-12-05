@@ -46,17 +46,25 @@ public class ReviewController {
     public ResponseEntity updateCodeReview(
             @PathVariable Long id,
             @RequestBody ReviewUpdateRequest request,
-            @AuthenticationPrincipal UserAuthentication userDetails
+            @AuthenticationPrincipal AuthPayload userDetails
     ) {
-        return reviewServicer.updateCodeReview(id, request, userDetails.getPrincipal().userId());
+        return reviewServicer.updateCodeReview(id, request, userDetails.userId());
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity deleteCodeReview(
             @PathVariable Long id,
-            @AuthenticationPrincipal UserAuthentication userDetails
+            @AuthenticationPrincipal AuthPayload userDetails
     ) {
-        return reviewServicer.deleteCodeReview(id, userDetails.getPrincipal().userId());
+        return reviewServicer.deleteCodeReview(id, userDetails.userId());
+    }
+
+    @PostMapping("/success/{id}")
+    public ResponseEntity successCodeReview(
+            @PathVariable Long id,
+            @AuthenticationPrincipal AuthPayload userDetails
+    ){
+        return reviewServicer.successCodeReview(id, userDetails.userId());
     }
 
 }

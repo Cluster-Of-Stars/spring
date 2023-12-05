@@ -5,9 +5,9 @@ import com.codereview.codereview.global.error.errortype.UserErrorType;
 import com.codereview.codereview.global.error.exception.BoardExceptionImpl;
 import com.codereview.codereview.global.error.exception.UserExceptionImpl;
 import com.codereview.codereview.global.model.entity.Review;
-import com.codereview.codereview.global.model.entity.ReviewHeart;
 import com.codereview.codereview.global.model.entity.ReviewView;
 import com.codereview.codereview.global.model.entity.User;
+import com.codereview.codereview.global.model.type.CodeReviewStatus;
 import com.codereview.codereview.global.repository.ReviewRepository;
 import com.codereview.codereview.global.repository.ReviewViewRepository;
 import com.codereview.codereview.global.repository.UserRepository;
@@ -125,6 +125,17 @@ public class ReviewService {
                     .build()
             );
         }
+    }
+
+    @Transactional
+    public ResponseEntity successCodeReview(Long boardId, Long userId) {
+
+        Review review = getReview(boardId);
+        checkUser(review.getUser(), getUser(userId));
+
+        review.updateCodeReview(CodeReviewStatus.CODE_CLEAR);
+
+        return ResponseEntity.ok().build();
     }
 
 }
