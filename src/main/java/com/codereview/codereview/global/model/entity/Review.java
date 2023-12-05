@@ -60,4 +60,10 @@ public class Review extends TimeStampEntity {
         this.question = question;
     }
 
+    public void updateCodeReview(
+            CodeReviewStatus status
+    ){
+        this.status = status;
+    }
+
 }

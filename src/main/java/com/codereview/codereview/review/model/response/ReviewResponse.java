@@ -14,6 +14,7 @@ public record ReviewResponse(
         List<String> category,
         CodeReviewStatus action,
         Long heartCount,
+        Long views,
         LocalDateTime createdAt
 ) {
 }

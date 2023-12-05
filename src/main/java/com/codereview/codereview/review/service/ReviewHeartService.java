@@ -1,7 +1,9 @@
 package com.codereview.codereview.review.service;
 
 import com.codereview.codereview.global.error.errortype.BoardErrorType;
+import com.codereview.codereview.global.error.errortype.UserErrorType;
 import com.codereview.codereview.global.error.exception.BoardExceptionImpl;
+import com.codereview.codereview.global.error.exception.UserExceptionImpl;
 import com.codereview.codereview.global.model.entity.Review;
 import com.codereview.codereview.global.model.entity.ReviewHeart;
 import com.codereview.codereview.global.model.entity.ReviewView;
@@ -55,10 +57,9 @@ public class ReviewHeartService {
 
     @Transactional
     private User getUser(Long id) {
-        //TODO: 예외처리 해야함.
         return userRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new BoardExceptionImpl(BoardErrorType.BOARD_NOT_FOUND);
+                    throw new UserExceptionImpl(UserErrorType.NOT_USER);
                 });
     }
 

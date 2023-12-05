@@ -1,11 +1,13 @@
 package com.codereview.codereview.review.service;
 
 import com.codereview.codereview.global.error.errortype.BoardErrorType;
+import com.codereview.codereview.global.error.errortype.UserErrorType;
 import com.codereview.codereview.global.error.exception.BoardExceptionImpl;
+import com.codereview.codereview.global.error.exception.UserExceptionImpl;
 import com.codereview.codereview.global.model.entity.Review;
-import com.codereview.codereview.global.model.entity.ReviewHeart;
 import com.codereview.codereview.global.model.entity.ReviewView;
 import com.codereview.codereview.global.model.entity.User;
+import com.codereview.codereview.global.model.type.CodeReviewStatus;
 import com.codereview.codereview.global.repository.ReviewRepository;
 import com.codereview.codereview.global.repository.ReviewViewRepository;
 import com.codereview.codereview.global.repository.UserRepository;
@@ -34,7 +36,6 @@ public class ReviewService {
 
     @Transactional
     public ResponseEntity createCodeReview(ReviewCreateRequest request, Long userId) {
-        System.out.println(request);
         boardRepository.save(request.toBoard(request, getUser(userId)));
         return ResponseEntity.ok().build();
     }
@@ -75,16 +76,15 @@ public class ReviewService {
 
     @Transactional
     private User getUser(Long id) {
-        //TODO: 예외처리 해야함.
         return userRepository.findById(id)
                 .orElseThrow(() -> {
-                    throw new BoardExceptionImpl(BoardErrorType.BOARD_NOT_FOUND);
+                    throw new UserExceptionImpl(UserErrorType.NOT_USER);
                 });
     }
 
     private void checkUser(User codereviewUser, User user) {
         if (codereviewUser.getId() != user.getId()) {
-            //TODO: 예외처리
+            throw new UserExceptionImpl(UserErrorType.NOT_USER);
         }
     }
 
@@ -102,8 +102,8 @@ public class ReviewService {
     public ResponseEntity selectOneCodeReview(Long reviewId, Long userId) {
         ReviewOneResponse reviewResponse = boardRepository.findOneBoard(reviewId)
                 .orElseThrow(() -> {
-                    throw new IllegalArgumentException();
-                }); //TODO: 예외처리
+                    throw new BoardExceptionImpl(BoardErrorType.BOARD_NOT_FOUND);
+                });
 
         validationView(reviewId, userId);
 
@@ -125,6 +125,17 @@ public class ReviewService {
                     .build()
             );
         }
+    }
+
+    @Transactional
+    public ResponseEntity successCodeReview(Long boardId, Long userId) {
+
+        Review review = getReview(boardId);
+        checkUser(review.getUser(), getUser(userId));
+
+        review.updateCodeReview(CodeReviewStatus.CODE_CLEAR);
+
+        return ResponseEntity.ok().build();
     }
 
 }
