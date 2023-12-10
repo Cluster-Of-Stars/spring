@@ -36,7 +36,7 @@ public class Review extends TimeStampEntity {
     @ElementCollection(targetClass = String.class, fetch = FetchType.EAGER)
     private List<String> category;
 
-    @ManyToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    @ManyToOne(fetch = FetchType.LAZY)
     private User user;
 
     @OneToMany(mappedBy = "review", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
@@ -59,7 +59,7 @@ public class Review extends TimeStampEntity {
 
     public void updateCodeReview(
             CodeReviewStatus status
-    ){
+    ) {
         this.status = status;
     }
 
