@@ -15,6 +15,7 @@ public record ReviewOneResponse(
         Long heartCount,
         Long views,
         String code,
+        Boolean heartCheck,
         LocalDateTime createdAt
 ) {
 }

@@ -13,6 +13,6 @@ public interface ReviewRepositoryCustom {
 
     Page<ReviewResponse> findAllCateogryReviewPage(Pageable pageable, long count, String category);
 
-    Optional<ReviewOneResponse> findOneBoard(Long id);
+    Optional<ReviewOneResponse> findOneBoard(Long id, Long userId);
 
 }
