@@ -66,28 +66,6 @@ public class ReviewService {
         return ResponseEntity.ok().build();
     }
 
-    @Transactional
-    private Review getReview(Long id) {
-        return boardRepository.findById(id)
-                .orElseThrow(() -> {
-                    throw new CodeReviewExceptionImpl(CodeReviewErrorType.BOARD_NOT_FOUND);
-                });
-    }
-
-    @Transactional
-    private User getUser(Long id) {
-        return userRepository.findById(id)
-                .orElseThrow(() -> {
-                    throw new UserExceptionImpl(UserErrorType.NOT_USER);
-                });
-    }
-
-    private void checkUser(User codereviewUser, User user) {
-        if (codereviewUser.getId() != user.getId()) {
-            throw new UserExceptionImpl(UserErrorType.NOT_USER);
-        }
-    }
-
     @Transactional(readOnly = true)
     public ResponseEntity selectCodeReview(Integer size, Integer page) {
         Pageable pageable = PageRequest.of(page, size, Sort.by(Sort.Direction.ASC, "createdAt"));
@@ -100,31 +78,13 @@ public class ReviewService {
 
     @Transactional
     public ResponseEntity selectOneCodeReview(Long reviewId, Long userId) {
-        ReviewOneResponse reviewResponse = boardRepository.findOneBoard(reviewId)
+        ReviewOneResponse reviewResponse = boardRepository.findOneBoard(reviewId, userId)
                 .orElseThrow(() -> {
                     throw new CodeReviewExceptionImpl(CodeReviewErrorType.BOARD_NOT_FOUND);
                 });
 
-        validationView(reviewId, userId);
-
         return ResponseEntity.ok()
                 .body(reviewResponse);
-    }
-
-    @Transactional
-    private void validationView(Long reviewId, Long userId) {
-        Review review = getReview(reviewId);
-        User user = getUser(userId);
-
-        Optional<ReviewView> reviewView = reviewViewRepository.findReviewView(reviewId, userId);
-
-        if (reviewView.isEmpty()) {
-            reviewViewRepository.save(ReviewView.builder()
-                    .review(review)
-                    .user(user)
-                    .build()
-            );
-        }
     }
 
     @Transactional
@@ -147,6 +107,28 @@ public class ReviewService {
 
         return ResponseEntity.ok()
                 .body(reviewResponses);
+    }
+
+    @Transactional
+    private Review getReview(Long id) {
+        return boardRepository.findById(id)
+                .orElseThrow(() -> {
+                    throw new CodeReviewExceptionImpl(CodeReviewErrorType.BOARD_NOT_FOUND);
+                });
+    }
+
+    @Transactional
+    private User getUser(Long id) {
+        return userRepository.findById(id)
+                .orElseThrow(() -> {
+                    throw new UserExceptionImpl(UserErrorType.NOT_USER);
+                });
+    }
+
+    private void checkUser(User codereviewUser, User user) {
+        if (codereviewUser.getId() != user.getId()) {
+            throw new UserExceptionImpl(UserErrorType.NOT_USER);
+        }
     }
 
 }

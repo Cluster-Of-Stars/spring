@@ -1,8 +1,6 @@
 package com.codereview.codereview.global.repository.review.querydsl;
 
-import com.codereview.codereview.global.model.entity.QReview;
-import com.codereview.codereview.global.model.entity.Review;
-import com.codereview.codereview.global.model.entity.QUser;
+import com.codereview.codereview.global.model.entity.*;
 import com.codereview.codereview.review.model.response.ReviewOneResponse;
 import com.codereview.codereview.review.model.response.ReviewResponse;
 import com.querydsl.core.types.dsl.BooleanExpression;
@@ -14,6 +12,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.support.QuerydslRepositorySupport;
 
 import java.util.List;
+import java.util.Objects;
 import java.util.Optional;
 
 import static org.springframework.util.StringUtils.isEmpty;
@@ -22,6 +21,8 @@ public class ReviewRepositoryCustomImpl extends QuerydslRepositorySupport implem
 
     private QReview qReview = QReview.review;
     private QUser qUser = QUser.user;
+    private QReviewHeart qReviewHeart = QReviewHeart.reviewHeart;
+    private QReviewView qReviewView = QReviewView.reviewView;
     private final EntityManager em;
     private final JPAQueryFactory queryFactory;
 
@@ -91,12 +92,20 @@ public class ReviewRepositoryCustomImpl extends QuerydslRepositorySupport implem
     }
 
     @Override
-    public Optional<ReviewOneResponse> findOneBoard(Long id) {
+    public Optional<ReviewOneResponse> findOneBoard(Long id, Long userId) {
 
         Review review = queryFactory
                 .selectFrom(qReview)
-                .orderBy(qReview.createdAt.desc())
                 .where(reviewIdEq(id))
+                .fetchOne();
+
+        if (Objects.isNull(review)) {
+            return Optional.empty();
+        }
+
+        ReviewHeart reviewHeart = queryFactory
+                .selectFrom(qReviewHeart)
+                .where(reviewHeartReviewIdEq(id), reviewHeartUserIdEq(userId))
                 .fetchOne();
 
         ReviewOneResponse response = new ReviewOneResponse(
@@ -109,11 +118,25 @@ public class ReviewRepositoryCustomImpl extends QuerydslRepositorySupport implem
                 (long) review.getReviewHearts().size(),
                 (long) review.getReviewViews().size(),
                 review.getCode(),
+                heartCheck(reviewHeart),
                 review.getCreatedAt()
         );
 
         return Optional.of(response);
     }
+
+    private boolean heartCheck(ReviewHeart reviewHeart) {
+        return reviewHeart != null;
+    }
+
+    private BooleanExpression reviewHeartUserIdEq(Long id) {
+        return isEmpty(id) ? null : qReviewHeart.review.user.id.eq(id);
+    }
+
+    private BooleanExpression reviewHeartReviewIdEq(Long id) {
+        return isEmpty(id) ? null : qReviewHeart.review.id.eq(id);
+    }
+
 
     private BooleanExpression reviewIdEq(Long id) {
         return isEmpty(id) ? null : qReview.id.eq(id);
