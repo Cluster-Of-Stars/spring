@@ -9,7 +9,7 @@ import lombok.*;
 @Getter
 @ToString
 @AllArgsConstructor
-public class ReviewHeart extends TimeStamp {
+public class ReviewCommentHeart {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -19,6 +19,5 @@ public class ReviewHeart extends TimeStamp {
     private User user;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Review review;
-
+    private ReviewComment reviewComment;
 }
