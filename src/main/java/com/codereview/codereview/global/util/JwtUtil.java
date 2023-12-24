@@ -1,8 +1,7 @@
 package com.codereview.codereview.global.util;
 
-import com.codereview.codereview.global.error.errortype.LoginErrorType;
-import com.codereview.codereview.global.error.exception.LoginExceptionImpl;
-import com.codereview.codereview.global.model.type.Rank;
+import com.codereview.codereview.global.exception.ErrorStatusExceptionImpl;
+import com.codereview.codereview.global.exception.type.LoginErrorType;
 import io.jsonwebtoken.*;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
@@ -15,7 +14,6 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
 import org.springframework.util.StringUtils;
 
-import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 import java.net.URLDecoder;
 import java.net.URLEncoder;
@@ -82,7 +80,7 @@ public class JwtUtil {
         if (StringUtils.hasText(tokenValue) && tokenValue.startsWith(BEARER_PREFIX)) {
             return tokenValue.substring(7);
         }
-        throw new LoginExceptionImpl(LoginErrorType.LOGIN_ERROR);
+        throw new ErrorStatusExceptionImpl(LoginErrorType.LOGIN_ERROR);
     }
 
     // 토큰 검증
@@ -116,7 +114,7 @@ public class JwtUtil {
                     try {
                         return URLDecoder.decode(cookie.getValue(), "UTF-8"); // Encode 되어 넘어간 Value 다시 Decode
                     } catch (UnsupportedEncodingException e) {
-                        throw new LoginExceptionImpl(LoginErrorType.LOGIN_ERROR);
+                        throw new ErrorStatusExceptionImpl(LoginErrorType.LOGIN_ERROR);
                     }
                 }
             }

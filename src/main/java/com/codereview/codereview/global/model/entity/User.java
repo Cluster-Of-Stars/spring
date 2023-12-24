@@ -1,6 +1,6 @@
 package com.codereview.codereview.global.model.entity;
 
-import com.codereview.codereview.global.model.type.Rank;
+import com.codereview.codereview.global.model.entity.type.Rank;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -12,7 +12,7 @@ import java.util.List;
 @Getter
 @ToString
 @AllArgsConstructor
-public class User extends TimeStampEntity {
+public class User extends TimeStamp {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
@@ -30,8 +30,8 @@ public class User extends TimeStampEntity {
     @Enumerated
     private Rank rank;
 
-    @ElementCollection(targetClass = String.class, fetch = FetchType.LAZY)
-    private List<String> skills;
+    @ManyToMany(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<Category> category;
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<Review> reviews;
@@ -41,5 +41,11 @@ public class User extends TimeStampEntity {
 
     @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ReviewView> reviewViews;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ReviewCommentHeart> reviewCommentHearts;
+
+    @OneToMany(mappedBy = "user", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+    private List<ReviewComment> reviewComments;
 
 }

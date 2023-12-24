@@ -1,24 +1,26 @@
 package com.codereview.codereview.global.model.entity;
 
 import jakarta.persistence.*;
-import lombok.*;
+import lombok.AllArgsConstructor;
+import lombok.Builder;
+import lombok.Getter;
+import lombok.NoArgsConstructor;
 
 @Entity
 @Builder
 @NoArgsConstructor
-@Getter
-@ToString
 @AllArgsConstructor
-public class ReviewHeart extends TimeStamp {
+@Getter
+public class Category {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private User user;
+    @Column
+    private String skill;
 
-    @ManyToOne(fetch = FetchType.LAZY)
-    private Review review;
+    @Column
+    private String info;
 
 }
