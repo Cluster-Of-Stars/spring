@@ -56,6 +56,7 @@ public class ReviewService {
 
         serviceUtil.checkUser(review.getUser(), userId);
 
+        review.deleteCodeReviewCategory();
         serviceUtil.getReviewRepository().delete(review);
         return ResponseEntity.ok().build();
     }

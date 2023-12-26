@@ -67,4 +67,8 @@ public class Review extends TimeStamp {
         this.status = status;
     }
 
+    public void deleteCodeReviewCategory(){
+        this.category = null;
+    }
+
 }

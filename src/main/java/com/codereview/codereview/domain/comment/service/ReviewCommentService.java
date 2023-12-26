@@ -61,6 +61,7 @@ public class ReviewCommentService {
 
         List<ReviewCommentResponse> reviewCommentResponses = reviewComments.stream()
                 .map(comment -> new ReviewCommentResponse(
+                        comment.getId(),
                         comment.getContent(),
                         comment.getReviewCommentHearts().stream().count(),
                         !(serviceUtil.getCommentHeartRepository().findByUserIdAndReviewCommentId(userId, comment.getId()).isEmpty())

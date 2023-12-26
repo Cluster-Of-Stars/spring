@@ -7,6 +7,8 @@ import com.codereview.codereview.global.util.JwtUtil;
 import lombok.RequiredArgsConstructor;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
+import org.springframework.http.HttpStatusCode;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -75,11 +77,13 @@ public class WebSecurityConfig {
                 authorizeHttpRequests
                         .requestMatchers(
                                 "/api/register/**",
-                                "/api/codeReview",
-                                "/api/skill",
                                 "/api/login",
                                 "/api/register/**"
                         ).permitAll()
+                        .requestMatchers(HttpMethod.GET,
+                                "/api/codeReview",
+                                "/api/skill",
+                                "/api/codeReview/category").permitAll()
                         .anyRequest().authenticated()
         );
 
